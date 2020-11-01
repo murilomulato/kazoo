@@ -636,6 +636,9 @@ content_type_accepted_fold(<<ContentType/binary>>, Acc, FromFun, ClientCT) ->
             lager:debug("skipping content-type: ~p", [{Type, SubType}]),
             Acc
     end;
+content_type_accepted_fold({Type, SubType}=EncType, Acc, FromFun, _ClientCT) ->
+    lager:debug("adding accepted content-type: ~p(~p)", [EncType, FromFun]),
+    [{{Type, SubType, '*'}, FromFun} | Acc];
 content_type_accepted_fold({_,_,_}=EncType, Acc, FromFun, _ClientCT) ->
     lager:debug("adding accepted content-type: ~p(~p)", [EncType, FromFun]),
     [{EncType, FromFun} | Acc].
